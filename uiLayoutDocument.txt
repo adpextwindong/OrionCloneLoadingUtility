@@ -1,0 +1,42 @@
+LOADING TEXT ANIM |LOAD ASSETS|
+
+COMPANY INTRO
+~~~ PRODUCTION
+
+TITLE ANIM
+
+INTRO ANIM
+
+CREDITS ANIM
+
+MENU
+	Continue Game (Most recent turn)
+	Load Game (Goes to list of save games, (CANCEL/OK))
+	New Game
+	Quit to Dos
+
+NEW GAME SCREEN
+
+	GALAXY SIZE (4 different, small med large huge)
+	DIFFICULTY 
+	OPPONENTS range[1,5]
+
+
+Choose Race
+	10 races
+		With Race Avatar
+			and Description
+
+Choose Banner
+	Blue Green Purple Red White Yellow
+		Flag Avatar with anim
+
+Your Name prompt with eol char anim
+	with random genn'd name start
+
+Home world name
+	with default genn'd name and eol char anim
+
+
+
+ACTUAL GAME
