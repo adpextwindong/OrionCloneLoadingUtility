@@ -15,7 +15,6 @@
    // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // OrionClone.cpp : Defines the entry point for the console application.
-//define namespace with "namespace NAME { CODE... };" //TODO make namespace for the library's shit
 #include "stdafx.h"
 #include <string>
 #include <vector>
@@ -39,10 +38,10 @@ int _tmain(int argc, _TCHAR* argv[])//LOAD SCREEN PROJECT HAS TAKEN OVER. ORION 
 	sf::Font ArialFont;
 	sf::Texture pText;
 
-	std::vector<struct loadTarget> loadTargets;
-	loadEnum loadResult;
-	loadTargets.push_back(struct loadTarget(&ArialFont,"arial.ttf",NULL_LOAD_ARG));
-	loadTargets.push_back(struct loadTarget(&pText,"mjTextureTest.png",NULL_LOAD_ARG));
+	std::vector<struct OCLU::loadTarget> loadTargets;
+	OCLU::loadEnum loadResult;
+	loadTargets.push_back(struct OCLU::loadTarget(&ArialFont,"arial.ttf",NULL_LOAD_ARG));
+	loadTargets.push_back(struct OCLU::loadTarget(&pText,"mjTextureTest.png",NULL_LOAD_ARG));
 
 
 	
@@ -50,7 +49,7 @@ int _tmain(int argc, _TCHAR* argv[])//LOAD SCREEN PROJECT HAS TAKEN OVER. ORION 
 	sf::RenderWindow window(sf::VideoMode(640, 480), "Orion Clone Loading Screen Utility"); //OCLU
 	window.setFramerateLimit(60);
 
-	while((loadResult = loadAssets(&loadTargets))==fileLoadSuccess){//TODO Make a error handling function that can easily force a program exit.
+	while((loadResult = loadAssets(&loadTargets))==OCLU::fileLoadSuccess){//TODO Make a error handling function that can easily force a program exit.
 		printf("\n File Load Success \n");
 	}
 

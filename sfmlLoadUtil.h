@@ -26,7 +26,7 @@
 	loadFromStream() : sf::Shader , sf::Font , sf::SoundBuffer , sf::Texture , sf::Image
 */
 
-
+namespace OCLU{
 #define SUPPORTED_GRAPHICS_CLASSES_MACRO sf_Shader , sf_Texture , sf_Font , sf_Image, sf_VertexShader 
 #define SUPPORTED_AUDIO_CLASSES_MACRO sf_SoundBuffer
 #ifdef SFML_GRAPHICS_HPP  //wow check out how VS2010 highlights live preprocessor if's and greys out dead code. Only if it had switch case generators and other shit
@@ -330,3 +330,5 @@ template <typename F> void templateParamNameCheck(F pFuncArg){
 template <typename F> void templateClassNameCheck(){
 	printf("%s",typeid(F).name());
 };
+
+}
