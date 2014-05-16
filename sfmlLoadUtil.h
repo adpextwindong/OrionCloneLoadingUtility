@@ -91,30 +91,11 @@ struct loadTarget{//Work around for the SFML library lacking an interface for ob
 	void * secondaryArg;
 	std::string secondaryArgTypeString;
 	bool isUnaryFunctionTarget;
-	
-	//struct constructor
-	//different constructors
-		//single filename string
-		//double filename string to GLSL shader files
-		//single filename string, sf::intrect for sf::Texture
-			//implement default param for that
-		//single filename, enum sf::Shader::Type
-	//max params all signatures = 2
 
 	//Using generics we can safely get the type of the class without relieing on the user to manually typeid'ing for the name
 	//More secure that way, someone could forge a class name and throw and error. idk why they'd do that
 	//Hopefully I can implement a c99 version of this for the c binding.
 
-	//template <class T,class S>  loadTarget(T * targParam,std::string pathParam)://YO LETS OVERLOAD SOME CONSTRUCTORS
-	//	targetPointer((void *) targParam),								
-	//	targetTypeString(typeid(targParam).name()),							
-	//	pathStringArg(pathParam),
-	//	secondaryArg((void *) nullptr),
-	//	secondaryArgTypeString(typeid(secondArg).name()),
-	//	isUnaryFunctionTarget(true),//TODO add in checks for unary/binary parameter shit
-	//								//VS2010 seriously sucks balls. Pleaserino templateirino correctlyrino
-	//	{};
-	
 	template <class T,class S> loadTarget(T * targParam,std::string pathParam,S * secondArg):	
 		targetPointer((void *) targParam),								
 		targetTypeString(typeid(targParam).name()),							
@@ -185,9 +166,9 @@ template <class CAST_CLASS, class CAST_PARAM, class FUNC> loadEnum templateBinar
 };
 
 enum loadEnum loadAssets(std::vector<struct loadTarget> * paramList){//Resource loader that behaves similar to cstring strtok
-	static std::vector<struct loadTarget> loadTargetList;//todo fix list problems
+	static std::vector<struct loadTarget> loadTargetList;
 	static std::vector<struct loadTarget> * prevCallList;
-	static unsigned int assetCounter = 0;//muh ternaries
+	static unsigned int assetCounter = 0;
 	bool pushMore = false;
 	if(prevCallList != paramList){
 		prevCallList = paramList;
@@ -207,7 +188,7 @@ enum loadEnum loadAssets(std::vector<struct loadTarget> * paramList){//Resource 
 	printf("%d %d",assetCounter,loadTargetList.size());
 	if(assetCounter < loadTargetList.size()){
 		struct loadTarget * pLoadTarget = &loadTargetList[assetCounter];
-		switch(AssetClassStringToEnum(pLoadTarget->targetTypeString)){//todo finish switch cases with new templateloader
+		switch(AssetClassStringToEnum(pLoadTarget->targetTypeString)){
 
 #ifdef SFML_GRAPHICS_HPP
 		case sf_Font:
@@ -239,7 +220,6 @@ enum loadEnum loadAssets(std::vector<struct loadTarget> * paramList){//Resource 
 
 					}else if(pLoadTarget->secondaryArgTypeString.compare(typeid(sf::Shader::Type).name())==0){// Shader Signature function
 						bool (sf::Shader::*pVertexFunc)(const std::string &,sf::Shader::Type) = &sf::Shader::loadFromFile;
-						//TODO figure this shit out
 						returnVal = templateBinaryDerefLoad<sf::Shader,sf::Shader::Type>(pLoadTarget,pVertexFunc);
 
 					}else{
