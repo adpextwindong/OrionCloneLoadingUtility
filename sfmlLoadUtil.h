@@ -311,4 +311,12 @@ template <typename F> void templateClassNameCheck(){
 	printf("%s",typeid(F).name());
 };
 
+class OCLULoader{//TODO switch over to cleaner class instead of struct + function
+public:
+	void pushList(std::vector<struct OCLU::loadTarget> list);
+	void load();
+	const std::vector<struct OCLU::loadTarget> seeList();
+private:
+	bool firstLoad;
+};
 }
