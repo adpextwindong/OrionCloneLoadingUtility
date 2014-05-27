@@ -1,4 +1,4 @@
-   //Takumi Orion Clone Loading Screen Utility
+//Takumi Orion Clone Loading Screen Utility
    // Copyright (C) 2014  George Takumi Crary
 
    // This program is free software: you can redistribute it and/or modify
@@ -13,7 +13,8 @@
 
    // You should have received a copy of the GNU General Public License
    // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+#ifndef SFMLLOADUTIL_H
+#define SFMLLOADUTIL_H
 #include <cmath>
 #define PI 3.14159265
 #define NULL_LOAD_ARG (void *)nullptr
@@ -172,20 +173,20 @@ enum loadEnum loadAssets(std::vector<struct loadTarget> * paramList){//Resource 
 	bool pushMore = false;
 	if(prevCallList != paramList){
 		prevCallList = paramList;
-		pushMore = true;
+		pushMore = true;//We got a new list
 		assetCounter = 0;
 	}
 	enum loadEnum returnVal=fileLoadFail;
-	if(paramList!=nullptr && pushMore == true){
+	if(paramList!=nullptr && pushMore == true){//add the new list to the static list
 		for(unsigned int i=assetCounter; i < paramList->size(); i++){
 			loadTargetList.push_back((*paramList)[i]);
 		}
-	}else{
+	}else{//not a new list. Check if we've ran out.
 		if(assetCounter >= loadTargetList.size()-1){
 			returnVal = loadingFinished;
 		}
 	}
-	printf("%d %d",assetCounter,loadTargetList.size());
+	printf("Asset Counter: %d \nList Size: %d\n",assetCounter,loadTargetList.size());
 	if(assetCounter < loadTargetList.size()){
 		struct loadTarget * pLoadTarget = &loadTargetList[assetCounter];
 		switch(AssetClassStringToEnum(pLoadTarget->targetTypeString)){
@@ -201,8 +202,6 @@ enum loadEnum loadAssets(std::vector<struct loadTarget> * paramList){//Resource 
 					//Incorrect Secondary Arg Type
 					returnVal = incorrectSecondaryArgType;
 				}
-				
-
 				break;
 			}
 
@@ -311,14 +310,5 @@ template <typename F> void templateClassNameCheck(){
 	printf("%s",typeid(F).name());
 };
 
-class OCLULoader{//TODO switch over to cleaner class instead of struct + function
-public://this class should just be a simple little wrapper for std::vector<struct OCLU::loadTarget>, nothing more
-	void pushWholeList(std::vector<struct OCLU::loadTarget> targetlist);
-	void feedTarget(struct OCLU::loadTarget target);
-	void load();
-	const std::vector<struct OCLU::loadTarget> * const seeList();
-private:
-	std::vector<struct OCLU::loadTarget> loadTarglist;
-	//bool firstLoad;//handled by function
-};
 }
+#endif /*SFMLLOADUTIL_H*/
