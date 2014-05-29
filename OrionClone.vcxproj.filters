@@ -41,5 +41,8 @@
     <ClCompile Include="OCLULoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="sfmlLoadUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

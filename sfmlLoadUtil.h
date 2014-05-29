@@ -13,10 +13,11 @@
 
    // You should have received a copy of the GNU General Public License
    // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+#pragma once
 #ifndef SFMLLOADUTIL_H
 #define SFMLLOADUTIL_H
 #include <cmath>
+#include <vector>
 #define PI 3.14159265
 #define NULL_LOAD_ARG (void *)nullptr
 /*
@@ -29,6 +30,8 @@
 */
 
 namespace OCLU{
+
+void swag(void);
 #define SUPPORTED_GRAPHICS_CLASSES_MACRO sf_Shader , sf_Texture , sf_Font , sf_Image, sf_VertexShader 
 #define SUPPORTED_AUDIO_CLASSES_MACRO sf_SoundBuffer
 #ifdef SFML_GRAPHICS_HPP  //wow check out how VS2010 highlights live preprocessor if's and greys out dead code. Only if it had switch case generators and other shit
@@ -51,31 +54,8 @@ namespace OCLU{
 
 //enum supportedClasses{sf_Shader , sf_Texture , sf_Font , sf_Image , sf_Shader, nonSupported};//original preprocessorless enum.
 
-enum supportedClasses AssetClassStringToEnum(std::string classString){//implement conditional compile directives
-	enum supportedClasses returnVal = nonSupported;
+enum supportedClasses AssetClassStringToEnum(std::string classString);
 
-#ifdef SFML_GRAPHICS_HPP
-	if(classString.compare(typeid(sf::Font *).name())==0){
-		returnVal=sf_Font;
-	}else if(classString.compare(typeid(sf::Shader *).name())==0){
-		returnVal=sf_Shader;
-	}else if(classString.compare(typeid(sf::Texture *).name())==0){
-		returnVal=sf_Texture;
-	}else if(classString.compare(typeid(sf::Image *).name())==0){
-		returnVal=sf_Image;
-	}
-#endif
-
-#ifdef SFML_AUDIO_HPP		//if audio compile only
-	#ifdef SFML_GRAPHICS_HPP	//if graphics is included
-		else 
-	#endif
-			if(classString.compare(typeid(sf::SoundBuffer *).name())==0){
-				returnVal = sf_SoundBuffer;
-		}
-#endif
-	return returnVal;
-}
 enum loadEnum{
 	neverTouched,//this resolves the same list problem. all loadTargets are initialized to neverTouched.
 	invalidClass,//User tried to pass a class that doesn't have a sfml load function
@@ -111,6 +91,7 @@ struct loadTarget{//Work around for the SFML library lacking an interface for ob
 
 };
 
+enum loadEnum loadAssets(std::vector<struct loadTarget> * paramList);
 
 template <class CAST_CLASS, class FUNC> loadEnum templateUnaryLoad(struct loadTarget * payload,FUNC memberFunction){	//cast and call correct signature
 	loadEnum returnVal = nullPointerException;
@@ -167,7 +148,7 @@ template <class CAST_CLASS, class CAST_PARAM, class FUNC> loadEnum templateBinar
 	return returnVal;
 };
 
-enum loadEnum loadAssets(std::vector<struct loadTarget> * paramList);
+
 
 template <typename F> void templateParamNameCheck(F pFuncArg){
 	printf("%s",typeid(pFuncArg).name());

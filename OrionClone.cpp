@@ -42,16 +42,16 @@ int _tmain(int argc, _TCHAR* argv[])//LOAD SCREEN PROJECT HAS TAKEN OVER. ORION 
 	OCLU::loadEnum loadResult;
 	loadTargets.push_back(struct OCLU::loadTarget(&ArialFont,"arial.ttf",NULL_LOAD_ARG));
 	loadTargets.push_back(struct OCLU::loadTarget(&pText,"mjTextureTest.png",NULL_LOAD_ARG));
-
-
 	
 
 	sf::RenderWindow window(sf::VideoMode(640, 480), "Orion Clone Loading Screen Utility"); //OCLU
 	window.setFramerateLimit(60);
 
-	while((loadResult = loadAssets(&loadTargets))==OCLU::fileLoadSuccess){//TODO Make a error handling function that can easily force a program exit.
-		printf("\n File Load Success \n");
-	}
+	OCLU::swag();
+	//OCLU::loadAssets(&loadTargets);
+	//while((loadResult = OCLU::loadAssets(&loadTargets))==OCLU::fileLoadSuccess){//TODO Make a error handling function that can easily force a program exit.
+	//	printf("\n File Load Success \n");
+	//}
 
 	sf::Text myText;
 	//TODO make assertion functions that generically accept a pointer. Things like check if a font is loaded for a sf::Text to show properly
@@ -84,7 +84,6 @@ int _tmain(int argc, _TCHAR* argv[])//LOAD SCREEN PROJECT HAS TAKEN OVER. ORION 
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-		//loadAssets();
         window.clear();
 		window.draw(pSprite);
 		window.draw(myText);
@@ -110,4 +109,4 @@ int _tmain(int argc, _TCHAR* argv[])//LOAD SCREEN PROJECT HAS TAKEN OVER. ORION 
 //printf("Hash Code:%d\n",typeid(sf::Text).hash_code());
 //void * pTest = &myText;
 //printf("\nType Name is:%s\n",typeid(myText).name());//Type id just returns char * of that variable's type name. Not base variable's real type
-////consider replacing sfType enum with just 
+////consider replacing sfType enum with just

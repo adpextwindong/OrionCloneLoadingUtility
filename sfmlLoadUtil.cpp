@@ -1,8 +1,39 @@
+#include "stdafx.h"
 #include "sfmlLoadUtil.h"
+#include <vector>
 
-enum loadEnum loadAssets(std::vector<struct loadTarget> * paramList){//Resource loader that behaves similar to cstring strtok
-	static std::vector<struct loadTarget> loadTargetList;
-	static std::vector<struct loadTarget> * prevCallList;
+void OCLU::swag(void){
+
+};
+enum OCLU::supportedClasses AssetClassStringToEnum(std::string classString){//implement conditional compile directives
+	enum OCLU::supportedClasses returnVal = OCLU::nonSupported;
+
+#ifdef SFML_GRAPHICS_HPP
+	if(classString.compare(typeid(sf::Font *).name())==0){
+		returnVal=sf_Font;
+	}else if(classString.compare(typeid(sf::Shader *).name())==0){
+		returnVal=sf_Shader;
+	}else if(classString.compare(typeid(sf::Texture *).name())==0){
+		returnVal=sf_Texture;
+	}else if(classString.compare(typeid(sf::Image *).name())==0){
+		returnVal=sf_Image;
+	}
+#endif
+
+#ifdef SFML_AUDIO_HPP		//if audio compile only
+	#ifdef SFML_GRAPHICS_HPP	//if graphics is included
+		else 
+	#endif
+			if(classString.compare(typeid(sf::SoundBuffer *).name())==0){
+				returnVal = sf_SoundBuffer;
+		}
+#endif
+	return returnVal;
+};
+
+enum OCLU::loadEnum OCLU::loadAssets(std::vector<struct OCLU::loadTarget> * paramList){//Resource loader that behaves similar to cstring strtok
+	static std::vector<struct OCLU::loadTarget> loadTargetList;
+	static std::vector<struct OCLU::loadTarget> * prevCallList;
 	static unsigned int assetCounter = 0;
 	bool pushMore = false;
 	if(prevCallList != paramList){
@@ -10,19 +41,19 @@ enum loadEnum loadAssets(std::vector<struct loadTarget> * paramList){//Resource 
 		pushMore = true;
 		assetCounter = 0;
 	}
-	enum loadEnum returnVal=fileLoadFail;
+	enum OCLU::loadEnum returnVal=OCLU::fileLoadFail;
 	if(paramList!=nullptr && pushMore == true){
 		for(unsigned int i=assetCounter; i < paramList->size(); i++){
 			loadTargetList.push_back((*paramList)[i]);
 		}
 	}else{
 		if(assetCounter >= loadTargetList.size()-1){
-			returnVal = loadingFinished;
+			returnVal = OCLU::loadingFinished;
 		}
 	}
 	printf("%d %d",assetCounter,loadTargetList.size());
 	if(assetCounter < loadTargetList.size()){
-		struct loadTarget * pLoadTarget = &loadTargetList[assetCounter];
+		struct OCLU::loadTarget * pLoadTarget = &loadTargetList[assetCounter];
 		switch(AssetClassStringToEnum(pLoadTarget->targetTypeString)){
 
 #ifdef SFML_GRAPHICS_HPP
@@ -125,15 +156,15 @@ enum loadEnum loadAssets(std::vector<struct loadTarget> * paramList){//Resource 
 		default:
 			{
 				printf("\nERROR: Unimplemented Class or does not fit the loadFromFile interface\n");
-				returnVal = invalidClass;
+				returnVal = OCLU::invalidClass;
 				break;
 			}
 		}
 		pLoadTarget->loadResult = returnVal;
 	}
-	if(returnVal == fileLoadSuccess){
+	if(returnVal == OCLU::fileLoadSuccess){
 		assetCounter++;
 	}
 	
 	return returnVal;
-}
+};
