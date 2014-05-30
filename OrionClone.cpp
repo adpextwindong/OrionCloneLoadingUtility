@@ -24,6 +24,13 @@
 #include <SFML/Audio.hpp>
 #include "sfmlLoadUtil.h"
 
+template <typename F> void templateParamNameCheck(F pFuncArg){
+	printf("%s",typeid(pFuncArg).name());
+};
+template <typename F> void templateClassNameCheck(){
+	printf("%s",typeid(F).name());
+};
+
 int getAlphaOfInterval(float elapsedTime, float animInterval,double (*func)(double) = &sin){//consider function pointers for sin/cos curves
 	//I seriously doubt this default param value works in VS2010. Such a shitty ide...
 	if(func == nullptr){
