@@ -5,8 +5,15 @@
 #include <SFML\Audio.hpp>
 
 namespace OCLU{
-
-enum OCLU::loadEnum OCLU::loadAssets(std::vector<struct OCLU::loadTarget> * paramList){//Resource loader that behaves similar to cstring strtok
+	int OCLU::getAlphaOfInterval(float elapsedTime, float animInterval,double (*func)(double) = &sin){//consider function pointers for sin/cos curves
+		//I seriously doubt this default param value works in VS2010. Such a shitty ide...
+		if(func == nullptr){
+			printf("Why did you pass a null pointer.");
+			func = &sin;
+		}
+		return (int)fabs((255*func((elapsedTime/animInterval)*2*PI)));
+	}
+OCLU::OCLULoadResultWrapper OCLU::loadAssets(std::vector<struct OCLU::loadTarget> * paramList){//Resource loader that behaves similar to cstring strtok
 	static std::vector<struct loadTarget> loadTargetList;
 	static std::vector<struct loadTarget> * prevCallList;
 	static unsigned int assetCounter = 0;
@@ -16,7 +23,7 @@ enum OCLU::loadEnum OCLU::loadAssets(std::vector<struct OCLU::loadTarget> * para
 		pushMore = true;
 		assetCounter = 0;
 	}
-	enum loadEnum returnVal=fileLoadFail;
+	enum loadEnum returnVal = fileLoadFail;
 	if(paramList!=nullptr && pushMore == true){
 		for(unsigned int i=assetCounter; i < paramList->size(); i++){
 			loadTargetList.push_back((*paramList)[i]);
@@ -135,8 +142,8 @@ enum OCLU::loadEnum OCLU::loadAssets(std::vector<struct OCLU::loadTarget> * para
 	if(returnVal == fileLoadSuccess){
 		assetCounter++;
 	}
-	
-	return returnVal;
+	unsigned int temp = -1;
+	return OCLULoadResultWrapper(returnVal,OCLU::LoadScreenStats(0,loadTargetList.size()));
 }
 
 enum supportedClasses AssetClassStringToEnum(std::string classString){//implement conditional compile directives

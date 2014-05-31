@@ -19,6 +19,8 @@
 #include <vector>
 #define PI 3.14159265
 #define NULL_LOAD_ARG (void *)nullptr
+#include "LoadingScreen.h"
+#include "OCLULoader.h"
 /*
 	http://www.sfml-dev.org/documentation/2.1/functions_func_0x6c.php#index_l
 	loadFromFile() : sf::SoundBuffer , sf::Shader , sf::Texture , sf::Font , sf::Image
@@ -29,6 +31,8 @@
 */
 
 namespace OCLU{
+
+
 #define SUPPORTED_GRAPHICS_CLASSES_MACRO sf_Shader , sf_Texture , sf_Font , sf_Image, sf_VertexShader 
 #define SUPPORTED_AUDIO_CLASSES_MACRO sf_SoundBuffer
 
@@ -55,8 +59,25 @@ enum supportedClasses { SUPPORTED_GRAPHICS_CLASSES_MACRO , SUPPORTED_AUDIO_CLASS
 //#undef SUPPORTED_AUDIO_CLASSES_MACRO
 
 //enum supportedClasses{sf_Shader , sf_Texture , sf_Font , sf_Image , sf_Shader, nonSupported};//original preprocessorless enum.
+struct LoadScreenStats{
+	unsigned int filesLoaded;
+	unsigned int totalFiles;
 
-
+	LoadScreenStats(unsigned int _filesLoaded,unsigned int _totalFiles):
+		filesLoaded(_filesLoaded),
+		totalFiles(_totalFiles)
+		{
+		};
+};
+struct OCLULoadResultWrapper{//temp pair to make load screen work
+	enum loadEnum loadResult;
+	struct LoadScreenStats stats;
+	OCLULoadResultWrapper(loadEnum _loadResult, LoadScreenStats _stats):
+		loadResult(_loadResult),
+		stats(_stats)
+	{
+	};
+};
 enum loadEnum{
 	neverTouched,//this resolves the same list problem. all loadTargets are initialized to neverTouched.
 	invalidClass,//User tried to pass a class that doesn't have a sfml load function
@@ -91,9 +112,9 @@ struct loadTarget{//Work around for the SFML library lacking an interface for ob
 		};
 
 };
-
+int getAlphaOfInterval(float elapsedTime, float animInterval,double (*func)(double) = &sin);
 enum supportedClasses AssetClassStringToEnum(std::string classString);
-enum loadEnum loadAssets(std::vector<struct loadTarget> * paramList);//CSTRTOK VERSION
+OCLULoadResultWrapper loadAssets(std::vector<struct loadTarget> * paramList);//CSTRTOK VERSION
 
 //TEMPLADIC FUNCS GO BELOW THIS COMMENT
 template <class CAST_CLASS, class FUNC> loadEnum templateUnaryLoad(struct loadTarget * payload,FUNC memberFunction){	//cast and call correct signature
