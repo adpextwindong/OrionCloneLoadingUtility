@@ -34,7 +34,7 @@ namespace OCLU{
 
 enum supportedClasses { SUPPORTED_GRAPHICS_CLASSES_MACRO , SUPPORTED_AUDIO_CLASSES_MACRO , nonSupported };//this doesn't seem to work properly in the cpp
 
-//#ifdef SFML_GRAPHICS_HPP  //wow check out how VS2010 highlights live preprocessor if's and greys out dead code. Only if it had switch case generators and other shit
+//#ifdef SFML_GRAPHICS_HPP  //wow check out how VS2010 highlights live preprocessor if's and greys out dead code. Only if it had switch case generators
 //	#ifdef SFML_AUDIO_HPP
 //		enum supportedClasses { SUPPORTED_GRAPHICS_CLASSES_MACRO , SUPPORTED_AUDIO_CLASSES_MACRO , nonSupported };
 //	#else
@@ -46,7 +46,7 @@ enum supportedClasses { SUPPORTED_GRAPHICS_CLASSES_MACRO , SUPPORTED_AUDIO_CLASS
 //	#else
 //		enum supportedClasses { nonSupported } ;
 //		//#error ("Neither SFML graphics or audio are included. This library workaround is useless without them. Defined behavior by the work around is not guarrenteed.")
-//		//TODO fucking figure out this pragma warning shit. I don't get why its not fucking showing
+//	
 //	#endif
 //#endif
 
@@ -70,12 +70,13 @@ struct loadTarget{//Work around for the SFML library lacking an interface for ob
 	loadEnum loadResult;
 	void * targetPointer;
 	std::string targetTypeString;// 
-	std::string pathStringArg;//fuck visual studio 2010, no quick refactor tool. eclispe++;
+	std::string pathStringArg;
 	void * secondaryArg;
 	std::string secondaryArgTypeString;
 	bool isUnaryFunctionTarget;
 
 	//Using generics we can safely get the type of the class without relieing on the user to manually typeid'ing for the name
+	//Or having overloaded constructors for each acceptable type.
 	//More secure that way, someone could forge a class name and throw and error. idk why they'd do that
 	//Hopefully I can implement a c99 version of this for the c binding.
 
@@ -100,7 +101,7 @@ template <class CAST_CLASS, class FUNC> loadEnum templateUnaryLoad(struct loadTa
 	loadEnum returnVal = nullPointerException;
 	if(payload->targetPointer!=nullptr && memberFunction!=nullptr){										//Parameter type must be confirmed before calling. 
 		CAST_CLASS * pCastTarg = static_cast<CAST_CLASS *>(payload->targetPointer);					//Should be done after getting address of correct signature	
-		if(!((*pCastTarg).*memberFunction)(payload->pathStringArg)){									//These functions should be used privatly in the library anyways. Don't tear me a new one like OpenSSL
+		if(!((*pCastTarg).*memberFunction)(payload->pathStringArg)){									//These functions should be used privatly in the library anyways.
 			printf("\nError loading %s PATHS: %s\n",typeid(CAST_CLASS).name(),payload->pathStringArg.c_str());
 			returnVal = fileLoadFail;
 		}else{
@@ -115,7 +116,7 @@ template <class CAST_CLASS, class CAST_PARAM, class FUNC> loadEnum templateBinar
 	loadEnum returnVal = nullPointerException;
 	if(payload->targetPointer!=nullptr && memberFunction!=nullptr){										//Parameter type must be confirmed before calling. 
 		CAST_CLASS * pCastTarg = static_cast<CAST_CLASS *>(payload->targetPointer);
-		if(!payload->isUnaryFunctionTarget){//if it has two arguments									//These functions should be used privatly in the library anyways. Don't tear me a new one like OpenSSL
+		if(!payload->isUnaryFunctionTarget){//if it has two arguments									//These functions should be used privatly in the library anyways. 
 			const std::string & pFirstArg = (payload->pathStringArg);
 			CAST_PARAM * pSecondArg = (CAST_PARAM *)(payload->secondaryArg);
 			CAST_PARAM secondArg = *pSecondArg;
@@ -135,7 +136,7 @@ template <class CAST_CLASS, class CAST_PARAM, class FUNC> loadEnum templateBinar
 	loadEnum returnVal = nullPointerException;
 	if(payload->targetPointer!=nullptr && memberFunction!=nullptr){										//Parameter type must be confirmed before calling. 
 		CAST_CLASS * pCastTarg = static_cast<CAST_CLASS *>(payload->targetPointer);
-		if(!payload->isUnaryFunctionTarget){//if it has two arguments									//These functions should be used privatly in the library anyways. Don't tear me a new one like OpenSSL
+		if(!payload->isUnaryFunctionTarget){//if it has two arguments									//These functions should be used privatly in the library anyways.
 			const std::string & pFirstArg = (payload->pathStringArg);
 			CAST_PARAM pSecondArg = (CAST_PARAM)(payload->secondaryArg);
 			if(!((*pCastTarg).*memberFunction)(pFirstArg,pSecondArg)){
