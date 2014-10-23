@@ -1,4 +1,4 @@
-   //Takumi Orion Clone Loading Screen Utility
+   //Takumi Orion Clone Loading Screen Utility sfmlLoadUtil.h
    // Copyright (C) 2014  George Takumi Crary
 
    // This program is free software: you can redistribute it and/or modify
@@ -26,3 +26,5 @@ while updating the loading bar or something for your fancy little SFML game.
 OrionClone.cpp is the entry point for the utility demo.
 Yes this is a header only library for now. Yes I understand it will be compiled for every include.
 We'll cross that bridge when we get there. For now this utility must be completed.
+
+TODO: Move dependancies into its own folder or use a git submodule.
