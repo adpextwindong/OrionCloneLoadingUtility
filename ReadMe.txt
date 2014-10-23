@@ -27,4 +27,6 @@ OrionClone.cpp is the entry point for the utility demo.
 Yes this is a header only library for now. Yes I understand it will be compiled for every include.
 We'll cross that bridge when we get there. For now this utility must be completed.
 
+Warning: This has only been succesfully compiled on VS2010.
+
 TODO: Move dependancies into its own folder or use a git submodule.
